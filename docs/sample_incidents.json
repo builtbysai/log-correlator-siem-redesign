@@ -1,0 +1,81 @@
+[
+  {
+    "rule_id": "R002",
+    "mitre_id": "T1078",
+    "mitre_tactic": "Initial Access / Persistence",
+    "mitre_technique": "Valid Accounts",
+    "severity": "critical",
+    "title": "Successful login from 203.0.113.45 following brute force",
+    "description": "User 'root' successfully authenticated from 203.0.113.45 at 2026-08-30T03:14:52+00:00, within 300s of a brute-force burst from the same IP. The account should be treated as potentially compromised.",
+    "entities": {
+      "src_ip": "203.0.113.45",
+      "user": "root"
+    },
+    "first_seen": "2026-08-30T03:14:02+00:00",
+    "last_seen": "2026-08-30T03:14:52+00:00",
+    "recommended_action": "Force a password reset for the account, invalidate active sessions, and review actions taken by this login for further lateral movement."
+  },
+  {
+    "rule_id": "R005",
+    "mitre_id": "T1041",
+    "mitre_tactic": "Exfiltration",
+    "mitre_technique": "Exfiltration Over C2 Channel",
+    "severity": "critical",
+    "title": "Large outbound transfer 10.0.0.14 -> 198.51.100.200",
+    "description": "75,000,000 bytes sent from internal host 10.0.0.14 to external host 198.51.100.200 over tcp/443 at 2026-08-30T23:47:12+00:00 (outside business hours).",
+    "entities": {
+      "src_ip": "10.0.0.14",
+      "dst_ip": "198.51.100.200"
+    },
+    "first_seen": "2026-08-30T23:47:12+00:00",
+    "last_seen": "2026-08-30T23:47:12+00:00",
+    "recommended_action": "Confirm the transfer was expected (backup job, approved sync). If not, isolate the host and inspect for exfiltration tooling or a compromised process."
+  },
+  {
+    "rule_id": "R001",
+    "mitre_id": "T1110.001",
+    "mitre_tactic": "Credential Access",
+    "mitre_technique": "Brute Force: Password Guessing",
+    "severity": "high",
+    "title": "SSH brute force from 203.0.113.45",
+    "description": "5 failed SSH password attempts from 203.0.113.45 within 120s, targeting user(s): admin, root.",
+    "entities": {
+      "src_ip": "203.0.113.45",
+      "users": "admin, root"
+    },
+    "first_seen": "2026-08-30T03:14:02+00:00",
+    "last_seen": "2026-08-30T03:14:30+00:00",
+    "recommended_action": "Block or rate-limit the source IP, confirm targeted accounts were not compromised, and review fail2ban / SSH key-only auth policy."
+  },
+  {
+    "rule_id": "R004",
+    "mitre_id": "T1046",
+    "mitre_tactic": "Discovery",
+    "mitre_technique": "Network Service Discovery",
+    "severity": "medium",
+    "title": "Possible port scan: 203.0.113.45 -> 10.0.0.5",
+    "description": "203.0.113.45 probed 10 distinct ports on 10.0.0.5 within 60s (ports: [21, 22, 23, 25, 80, 443, 445, 3306, 3389, 8080]).",
+    "entities": {
+      "src_ip": "203.0.113.45",
+      "dst_ip": "10.0.0.5"
+    },
+    "first_seen": "2026-08-30T03:16:01+00:00",
+    "last_seen": "2026-08-30T03:16:19+00:00",
+    "recommended_action": "Verify whether this is an authorized vulnerability scan; if not, block the source at the perimeter and review what, if anything, responded."
+  },
+  {
+    "rule_id": "R003",
+    "mitre_id": "T1548.003",
+    "mitre_tactic": "Privilege Escalation",
+    "mitre_technique": "Abuse Elevation Control Mechanism: Sudo and Sudo Caching",
+    "severity": "medium",
+    "title": "Sudo failure(s) then success for user 'hans'",
+    "description": "User 'hans' had 2 sudo authentication failure(s) followed by a successful command ('/usr/sbin/useradd -m svc-backup') within 600s.",
+    "entities": {
+      "user": "hans"
+    },
+    "first_seen": "2026-08-30T03:25:00+00:00",
+    "last_seen": "2026-08-30T03:25:31+00:00",
+    "recommended_action": "Confirm the command was authorized by the account owner; if not, treat the session as compromised and audit sudoers configuration."
+  }
+]

@@ -1,0 +1,6 @@
+# Runtime: none. log_correlator is pure Python standard library by design,
+# so the correlation engine and dashboard renderer run anywhere Python 3.9+
+# runs, with no install step.
+#
+# Dev-only (for running the test suite):
+pytest>=7.0

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="292" viewBox="0 0 700 292" xml:space="preserve" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">
+  <rect width="700" height="292" rx="12" fill="#0a0e12" stroke="#232c36" stroke-width="1.5"/>
+  <circle cx="30" cy="24" r="6" fill="#3a4653"/>
+  <circle cx="52" cy="24" r="6" fill="#3a4653"/>
+  <circle cx="74" cy="24" r="6" fill="#3a4653"/>
+  <text x="100" y="29" font-size="12" fill="#8695a7">log-correlator-siem</text>
+  <line x1="0" y1="44" x2="700" y2="44" stroke="#232c36"/>
+
+  <g font-size="14">
+    <text x="24" y="80"><tspan fill="#8695a7">$ </tspan><tspan fill="#e7edf3">python3 main.py --auth data/sample_logs/auth.log \</tspan></text>
+    <text x="24" y="106"><tspan fill="#e7edf3">    --firewall data/sample_logs/firewall.csv --out output/dashboard.html</tspan></text>
+    <text x="24" y="144"><tspan fill="#e7edf3">Ingested 34 events -&gt; 5 incidents</tspan></text>
+    <text x="24" y="172"><tspan fill="#e7edf3">  </tspan><tspan fill="#ff5d7a">critical</tspan><tspan fill="#e7edf3"> 2</tspan></text>
+    <text x="24" y="200"><tspan fill="#e7edf3">  </tspan><tspan fill="#ff9d4d">high    </tspan><tspan fill="#e7edf3"> 1</tspan></text>
+    <text x="24" y="228"><tspan fill="#e7edf3">  </tspan><tspan fill="#f5d76e">medium  </tspan><tspan fill="#e7edf3"> 2</tspan></text>
+    <text x="24" y="266"><tspan fill="#e7edf3">Dashboard written to </tspan><tspan fill="#5eead4">output/dashboard.html</tspan></text>
+  </g>
+</svg>

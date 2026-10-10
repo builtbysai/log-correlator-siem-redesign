@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="470" viewBox="0 0 880 470" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif">
+  <rect width="880" height="470" rx="16" fill="#0a0e12" stroke="#232c36" stroke-width="1.5"/>
+
+  <!-- header -->
+  <text x="44" y="54" font-size="12" letter-spacing="2.5" fill="#8695a7">LOG-CORRELATOR-SIEM</text>
+  <text x="44" y="94" font-size="30" font-weight="700" fill="#e7edf3" letter-spacing="-0.01em">MITRE ATT&amp;CK-mapped incidents</text>
+  <text x="44" y="122" font-size="14" fill="#8695a7">A dependency-free Python engine that correlates raw SSH/sudo auth logs and firewall flows.</text>
+
+  <!-- inputs -->
+  <rect x="44" y="160" width="220" height="72" rx="10" fill="#11161c" stroke="#232c36"/>
+  <text x="64" y="190" font-size="14" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" fill="#e7edf3">auth.log</text>
+  <text x="64" y="212" font-size="12" fill="#8695a7">sshd / sudo events</text>
+
+  <rect x="44" y="244" width="220" height="72" rx="10" fill="#11161c" stroke="#232c36"/>
+  <text x="64" y="274" font-size="14" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" fill="#e7edf3">firewall.csv</text>
+  <text x="64" y="296" font-size="12" fill="#8695a7">flow records</text>
+
+  <text x="282" y="246" font-size="26" fill="#5eead4">&#8594;</text>
+
+  <!-- engine -->
+  <rect x="322" y="152" width="286" height="246" rx="10" fill="#11161c" stroke="#232c36"/>
+  <text x="346" y="182" font-size="12" letter-spacing="1.5" fill="#8695a7">CORRELATION ENGINE &#183; 5 RULES</text>
+  <g font-size="12">
+    <text x="346" y="212" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" fill="#5eead4">R001 &#183; T1110.001</text>
+    <text x="346" y="230" fill="#e7edf3">Password Guessing</text>
+    <text x="346" y="260" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" fill="#5eead4">R002 &#183; T1078</text>
+    <text x="346" y="278" fill="#e7edf3">Valid Accounts</text>
+    <text x="346" y="308" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" fill="#5eead4">R003 &#183; T1548.003</text>
+    <text x="346" y="326" fill="#e7edf3">Sudo Abuse</text>
+    <text x="346" y="356" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" fill="#5eead4">R004 &#183; T1046 / R005 &#183; T1041</text>
+    <text x="346" y="374" fill="#e7edf3">Service Discovery / Exfil over C2</text>
+  </g>
+
+  <text x="618" y="282" font-size="26" fill="#5eead4">&#8594;</text>
+
+  <!-- output -->
+  <rect x="644" y="176" width="196" height="172" rx="10" fill="#11161c" stroke="#232c36"/>
+  <text x="668" y="208" font-size="13" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" fill="#5eead4">dashboard.html</text>
+  <text x="668" y="236" font-size="14" font-weight="700" fill="#e7edf3">34 events &#8594; 5 incidents</text>
+  <g font-size="12" fill="#e7edf3">
+    <circle cx="676" cy="262" r="5" fill="#ff5d7a"/><text x="688" y="266">2 critical</text>
+    <circle cx="676" cy="288" r="5" fill="#ff9d4d"/><text x="688" y="292">1 high</text>
+    <circle cx="676" cy="314" r="5" fill="#f5d76e"/><text x="688" y="318">2 medium</text>
+  </g>
+
+  <!-- footer -->
+  <text x="44" y="438" font-size="12" fill="#8695a7">pure standard library &#183; no database &#183; no external services &#183; opens in any browser</text>
+</svg>
