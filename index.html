@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log Correlator - Incident Dashboard</title>
+<style>
+  :root {
+    --bg:#0a0e12; --panel:#11161c; --panel2:#161d25; --border:#232c36;
+    --text:#e7edf3; --muted:#8695a7; --accent:#5eead4;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--bg); color:var(--text);
+    font:15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+  }
+  header {
+    padding:32px clamp(16px,4vw,48px); border-bottom:1px solid var(--border);
+    display:flex; flex-wrap:wrap; gap:24px; align-items:baseline; justify-content:space-between;
+  }
+  header h1 { margin:0; font-size:22px; letter-spacing:-0.01em; }
+  header .sub { color:var(--muted); font-size:13px; }
+  main { padding:24px clamp(16px,4vw,48px) 64px; max-width:1100px; margin:0 auto; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:32px; }
+  .stat { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .stat .num { font-size:28px; font-weight:700; }
+  .stat .label { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.06em; }
+  .stat.critical .num { color:#ff5d7a; }
+  .stat.high .num { color:#ff9d4d; }
+  .stat.medium .num { color:#f5d76e; }
+  .stat.low .num { color:#6fd8a8; }
+  h2 { font-size:15px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin:36px 0 14px; }
+  .matrix { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:10px; }
+  .mx-cell { background:var(--panel); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:8px; padding:12px; }
+  .mx-id { color:var(--accent); font-size:12px; font-family:ui-monospace,monospace; }
+  .mx-name { font-size:13px; margin-top:2px; }
+  .mx-tactic { color:var(--muted); font-size:11px; margin-top:4px; }
+  .mx-count { color:var(--muted); font-size:11px; margin-top:6px; }
+  .incident { background:var(--panel); border:1px solid var(--border); border-left:3px solid var(--sev-color,var(--accent));
+               border-radius:10px; margin-bottom:10px; overflow:hidden; }
+  .incident-head { display:flex; align-items:center; gap:10px; padding:14px 16px; cursor:pointer; }
+  .sev-dot { width:9px; height:9px; border-radius:50%; flex:none; }
+  .incident-title { font-weight:600; flex:1; min-width:180px; }
+  .mitre-tag { color:var(--muted); font-size:12px; font-family:ui-monospace,monospace; }
+  .chev { color:var(--muted); transition:transform .2s ease; }
+  .incident.open .chev { transform:rotate(180deg); }
+  .incident-body { display:none; padding:0 16px 18px; border-top:1px solid var(--border); }
+  .incident.open .incident-body { display:block; padding-top:14px; }
+  .pills { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
+  .pill { background:var(--panel2); border:1px solid var(--border); border-radius:999px; padding:3px 10px; font-size:12px; color:var(--muted); }
+  .rec { font-size:13px; color:var(--muted); }
+  table.evidence { width:100%; border-collapse:collapse; margin-top:10px; font-size:12px; }
+  table.evidence th { text-align:left; color:var(--muted); font-weight:600; padding:6px 8px; border-bottom:1px solid var(--border); }
+  table.evidence td { padding:6px 8px; border-bottom:1px solid var(--border); vertical-align:top; }
+  .mono, td.mono { font-family:ui-monospace,monospace; word-break:break-all; }
+  .muted { color:var(--muted); }
+  footer { text-align:center; color:var(--muted); font-size:12px; padding:24px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Log Correlator - Incident Dashboard</h1>
+    <div class="sub">Generated 2026-10-10T14:13:46 &middot; event window 2026-08-30T03:09:00+00:00 &rarr; 2026-08-31T09:05:00+00:00</div>
+  </div>
+  <div class="sub">log-correlator-siem &middot; local, dependency-free correlation engine</div>
+</header>
+<main>
+  <div class="stats">
+    <div class="stat"><div class="num">34</div><div class="label">Events ingested</div></div>
+    <div class="stat"><div class="num">5</div><div class="label">Incidents</div></div>
+    <div class="stat critical"><div class="num">2</div><div class="label">Critical</div></div>
+    <div class="stat high"><div class="num">1</div><div class="label">High</div></div>
+    <div class="stat medium"><div class="num">2</div><div class="label">Medium</div></div>
+    <div class="stat low"><div class="num">0</div><div class="label">Low</div></div>
+  </div>
+
+  <h2>MITRE ATT&amp;CK techniques observed</h2>
+  <div class="matrix"><div class="mx-cell"><div class="mx-id">T1078</div><div class="mx-name">Valid Accounts</div><div class="mx-tactic">Initial Access / Persistence</div><div class="mx-count">&times;1</div></div><div class="mx-cell"><div class="mx-id">T1041</div><div class="mx-name">Exfiltration Over C2 Channel</div><div class="mx-tactic">Exfiltration</div><div class="mx-count">&times;1</div></div><div class="mx-cell"><div class="mx-id">T1110.001</div><div class="mx-name">Brute Force: Password Guessing</div><div class="mx-tactic">Credential Access</div><div class="mx-count">&times;1</div></div><div class="mx-cell"><div class="mx-id">T1046</div><div class="mx-name">Network Service Discovery</div><div class="mx-tactic">Discovery</div><div class="mx-count">&times;1</div></div><div class="mx-cell"><div class="mx-id">T1548.003</div><div class="mx-name">Abuse Elevation Control Mechanism: Sudo and Sudo Caching</div><div class="mx-tactic">Privilege Escalation</div><div class="mx-count">&times;1</div></div></div>
+
+  <h2>Incidents</h2>
+  
+    <div class="incident" style="--sev-color:#ff5d7a">
+      <div class="incident-head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="sev-dot" style="background:#ff5d7a"></span>
+        <span class="incident-title">Successful login from 203.0.113.45 following brute force</span>
+        <span class="mitre-tag">T1078 &middot; Valid Accounts</span>
+        <span class="chev">&#9662;</span>
+      </div>
+      <div class="incident-body">
+        <p>User &#x27;root&#x27; successfully authenticated from 203.0.113.45 at 2026-08-30T03:14:52+00:00, within 300s of a brute-force burst from the same IP. The account should be treated as potentially compromised.</p>
+        <div class="pills"><span class="pill">src_ip: 203.0.113.45</span><span class="pill">user: root</span></div>
+        <p class="rec"><strong>Recommended action:</strong> Force a password reset for the account, invalidate active sessions, and review actions taken by this login for further lateral movement.</p>
+        <table class="evidence">
+          <thead><tr><th>Timestamp</th><th>Source</th><th>Event</th><th>Raw</th></tr></thead>
+          <tbody><tr><td>2026-08-30T03:14:02+00:00</td><td>auth</td><td>ssh_failed_password</td><td class="mono">2026-08-30T03:14:02+00:00 web01 sshd[1204]: Failed password for invalid user admin from 203.0.113.45 port 51422 ssh2</td></tr>
+<tr><td>2026-08-30T03:14:07+00:00</td><td>auth</td><td>ssh_failed_password</td><td class="mono">2026-08-30T03:14:07+00:00 web01 sshd[1205]: Failed password for root from 203.0.113.45 port 51430 ssh2</td></tr>
+<tr><td>2026-08-30T03:14:14+00:00</td><td>auth</td><td>ssh_failed_password</td><td class="mono">2026-08-30T03:14:14+00:00 web01 sshd[1206]: Failed password for root from 203.0.113.45 port 51438 ssh2</td></tr>
+<tr><td>2026-08-30T03:14:22+00:00</td><td>auth</td><td>ssh_failed_password</td><td class="mono">2026-08-30T03:14:22+00:00 web01 sshd[1207]: Failed password for invalid user admin from 203.0.113.45 port 51446 ssh2</td></tr>
+<tr><td>2026-08-30T03:14:30+00:00</td><td>auth</td><td>ssh_failed_password</td><td class="mono">2026-08-30T03:14:30+00:00 web01 sshd[1208]: Failed password for root from 203.0.113.45 port 51454 ssh2</td></tr>
+<tr><td>2026-08-30T03:14:52+00:00</td><td>auth</td><td>ssh_accepted_password</td><td class="mono">2026-08-30T03:14:52+00:00 web01 sshd[1211]: Accepted password for root from 203.0.113.45 port 51478 ssh2</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="incident" style="--sev-color:#ff5d7a">
+      <div class="incident-head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="sev-dot" style="background:#ff5d7a"></span>
+        <span class="incident-title">Large outbound transfer 10.0.0.14 -&gt; 198.51.100.200</span>
+        <span class="mitre-tag">T1041 &middot; Exfiltration Over C2 Channel</span>
+        <span class="chev">&#9662;</span>
+      </div>
+      <div class="incident-body">
+        <p>75,000,000 bytes sent from internal host 10.0.0.14 to external host 198.51.100.200 over tcp/443 at 2026-08-30T23:47:12+00:00 (outside business hours).</p>
+        <div class="pills"><span class="pill">src_ip: 10.0.0.14</span><span class="pill">dst_ip: 198.51.100.200</span></div>
+        <p class="rec"><strong>Recommended action:</strong> Confirm the transfer was expected (backup job, approved sync). If not, isolate the host and inspect for exfiltration tooling or a compromised process.</p>
+        <table class="evidence">
+          <thead><tr><th>Timestamp</th><th>Source</th><th>Event</th><th>Raw</th></tr></thead>
+          <tbody><tr><td>2026-08-30T23:47:12+00:00</td><td>firewall</td><td>firewall_flow</td><td class="mono">2026-08-30T23:47:12+00:00,10.0.0.14,198.51.100.200,443,tcp,ALLOW,75000000</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="incident" style="--sev-color:#ff9d4d">
+      <div class="incident-head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="sev-dot" style="background:#ff9d4d"></span>
+        <span class="incident-title">SSH brute force from 203.0.113.45</span>
+        <span class="mitre-tag">T1110.001 &middot; Brute Force: Password Guessing</span>
+        <span class="chev">&#9662;</span>
+      </div>
+      <div class="incident-body">
+        <p>5 failed SSH password attempts from 203.0.113.45 within 120s, targeting user(s): admin, root.</p>
+        <div class="pills"><span class="pill">src_ip: 203.0.113.45</span><span class="pill">users: admin, root</span></div>
+        <p class="rec"><strong>Recommended action:</strong> Block or rate-limit the source IP, confirm targeted accounts were not compromised, and review fail2ban / SSH key-only auth policy.</p>
+        <table class="evidence">
+          <thead><tr><th>Timestamp</th><th>Source</th><th>Event</th><th>Raw</th></tr></thead>
+          <tbody><tr><td>2026-08-30T03:14:02+00:00</td><td>auth</td><td>ssh_failed_password</td><td class="mono">2026-08-30T03:14:02+00:00 web01 sshd[1204]: Failed password for invalid user admin from 203.0.113.45 port 51422 ssh2</td></tr>
+<tr><td>2026-08-30T03:14:07+00:00</td><td>auth</td><td>ssh_failed_password</td><td class="mono">2026-08-30T03:14:07+00:00 web01 sshd[1205]: Failed password for root from 203.0.113.45 port 51430 ssh2</td></tr>
+<tr><td>2026-08-30T03:14:14+00:00</td><td>auth</td><td>ssh_failed_password</td><td class="mono">2026-08-30T03:14:14+00:00 web01 sshd[1206]: Failed password for root from 203.0.113.45 port 51438 ssh2</td></tr>
+<tr><td>2026-08-30T03:14:22+00:00</td><td>auth</td><td>ssh_failed_password</td><td class="mono">2026-08-30T03:14:22+00:00 web01 sshd[1207]: Failed password for invalid user admin from 203.0.113.45 port 51446 ssh2</td></tr>
+<tr><td>2026-08-30T03:14:30+00:00</td><td>auth</td><td>ssh_failed_password</td><td class="mono">2026-08-30T03:14:30+00:00 web01 sshd[1208]: Failed password for root from 203.0.113.45 port 51454 ssh2</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="incident" style="--sev-color:#f5d76e">
+      <div class="incident-head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="sev-dot" style="background:#f5d76e"></span>
+        <span class="incident-title">Possible port scan: 203.0.113.45 -&gt; 10.0.0.5</span>
+        <span class="mitre-tag">T1046 &middot; Network Service Discovery</span>
+        <span class="chev">&#9662;</span>
+      </div>
+      <div class="incident-body">
+        <p>203.0.113.45 probed 10 distinct ports on 10.0.0.5 within 60s (ports: [21, 22, 23, 25, 80, 443, 445, 3306, 3389, 8080]).</p>
+        <div class="pills"><span class="pill">src_ip: 203.0.113.45</span><span class="pill">dst_ip: 10.0.0.5</span></div>
+        <p class="rec"><strong>Recommended action:</strong> Verify whether this is an authorized vulnerability scan; if not, block the source at the perimeter and review what, if anything, responded.</p>
+        <table class="evidence">
+          <thead><tr><th>Timestamp</th><th>Source</th><th>Event</th><th>Raw</th></tr></thead>
+          <tbody><tr><td>2026-08-30T03:16:01+00:00</td><td>firewall</td><td>firewall_flow</td><td class="mono">2026-08-30T03:16:01+00:00,203.0.113.45,10.0.0.5,21,tcp,DENY,60</td></tr>
+<tr><td>2026-08-30T03:16:03+00:00</td><td>firewall</td><td>firewall_flow</td><td class="mono">2026-08-30T03:16:03+00:00,203.0.113.45,10.0.0.5,22,tcp,ALLOW,60</td></tr>
+<tr><td>2026-08-30T03:16:05+00:00</td><td>firewall</td><td>firewall_flow</td><td class="mono">2026-08-30T03:16:05+00:00,203.0.113.45,10.0.0.5,23,tcp,DENY,60</td></tr>
+<tr><td>2026-08-30T03:16:07+00:00</td><td>firewall</td><td>firewall_flow</td><td class="mono">2026-08-30T03:16:07+00:00,203.0.113.45,10.0.0.5,25,tcp,DENY,60</td></tr>
+<tr><td>2026-08-30T03:16:09+00:00</td><td>firewall</td><td>firewall_flow</td><td class="mono">2026-08-30T03:16:09+00:00,203.0.113.45,10.0.0.5,80,tcp,ALLOW,220</td></tr>
+<tr><td>2026-08-30T03:16:11+00:00</td><td>firewall</td><td>firewall_flow</td><td class="mono">2026-08-30T03:16:11+00:00,203.0.113.45,10.0.0.5,443,tcp,ALLOW,220</td></tr>
+<tr><td>2026-08-30T03:16:13+00:00</td><td>firewall</td><td>firewall_flow</td><td class="mono">2026-08-30T03:16:13+00:00,203.0.113.45,10.0.0.5,445,tcp,DENY,60</td></tr>
+<tr><td>2026-08-30T03:16:15+00:00</td><td>firewall</td><td>firewall_flow</td><td class="mono">2026-08-30T03:16:15+00:00,203.0.113.45,10.0.0.5,3306,tcp,DENY,60</td></tr>
+<tr><td>2026-08-30T03:16:17+00:00</td><td>firewall</td><td>firewall_flow</td><td class="mono">2026-08-30T03:16:17+00:00,203.0.113.45,10.0.0.5,3389,tcp,DENY,60</td></tr>
+<tr><td>2026-08-30T03:16:19+00:00</td><td>firewall</td><td>firewall_flow</td><td class="mono">2026-08-30T03:16:19+00:00,203.0.113.45,10.0.0.5,8080,tcp,DENY,60</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="incident" style="--sev-color:#f5d76e">
+      <div class="incident-head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="sev-dot" style="background:#f5d76e"></span>
+        <span class="incident-title">Sudo failure(s) then success for user &#x27;hans&#x27;</span>
+        <span class="mitre-tag">T1548.003 &middot; Abuse Elevation Control Mechanism: Sudo and Sudo Caching</span>
+        <span class="chev">&#9662;</span>
+      </div>
+      <div class="incident-body">
+        <p>User &#x27;hans&#x27; had 2 sudo authentication failure(s) followed by a successful command (&#x27;/usr/sbin/useradd -m svc-backup&#x27;) within 600s.</p>
+        <div class="pills"><span class="pill">user: hans</span></div>
+        <p class="rec"><strong>Recommended action:</strong> Confirm the command was authorized by the account owner; if not, treat the session as compromised and audit sudoers configuration.</p>
+        <table class="evidence">
+          <thead><tr><th>Timestamp</th><th>Source</th><th>Event</th><th>Raw</th></tr></thead>
+          <tbody><tr><td>2026-08-30T03:25:00+00:00</td><td>auth</td><td>sudo_auth_failure</td><td class="mono">2026-08-30T03:25:00+00:00 web01 sudo: pam_unix(sudo:auth): authentication failure; logname=hans uid=1000 euid=0 tty=/dev/pts/0 ruser=hans rhost=  user=hans</td></tr>
+<tr><td>2026-08-30T03:25:04+00:00</td><td>auth</td><td>sudo_auth_failure</td><td class="mono">2026-08-30T03:25:04+00:00 web01 sudo: pam_unix(sudo:auth): authentication failure; logname=hans uid=1000 euid=0 tty=/dev/pts/0 ruser=hans rhost=  user=hans</td></tr>
+<tr><td>2026-08-30T03:25:31+00:00</td><td>auth</td><td>sudo_command</td><td class="mono">2026-08-30T03:25:31+00:00 web01 sudo: hans : TTY=pts/0 ; PWD=/home/hans ; USER=root ; COMMAND=/usr/sbin/useradd -m svc-backup</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+</main>
+<footer>Built by Hans Sai &middot; <a href="https://github.com/builtbysai/log-correlator-siem" style="color:var(--accent)">github.com/builtbysai/log-correlator-siem</a></footer>
+</body>
+</html>
